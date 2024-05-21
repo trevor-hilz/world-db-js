@@ -4,12 +4,16 @@
   "description": "world database in javascript / react",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server.js",
+    "client": "webpack serve --mode development --open --config webpack.config.js",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trevor-hilz/world-db-js.git"
   },
+  "type": "module",
   "author": "Trevor Hilz",
   "license": "ISC",
   "bugs": {
@@ -21,6 +25,7 @@
     "@babel/preset-react": "^7.24.1",
     "concurrently": "^8.2.2",
     "css-loader": "^7.1.1",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "html-webpack-plugin": "^5.6.0",
     "react": "^18.3.1",

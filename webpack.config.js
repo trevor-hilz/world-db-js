@@ -1,7 +1,7 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-module.exports = {
+export default {
   // Entry point of the application
   entry: './client/src/index.js', // Adjust this path to where your React app's entry file is located
 
@@ -32,7 +32,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
+            presets: [['@babel/preset-env', {"modules": false} '@babel/preset-react']
           }
         }
       },
