@@ -1,29 +1,37 @@
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default {
-  // Entry point of the application
-  entry: './client/src/index.js', // Adjust this path to where your React app's entry file is located
+  entry: './client/src/index.js',
 
-  // Output configuration
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
     publicPath: '/'
   },
 
-  // Development server configuration
   devServer: {
     static: {
       directory: path.join(__dirname, 'public'),
     },
-    historyApiFallback: true, // This is important for single-page applications
-    proxy: {
-      '/api': 'http://localhost:3000' // Assuming Express server is running on port 3000
-    }
+    historyApiFallback: true,
+    proxy: [{
+      context: ['/api'],
+      target: 'http://localhost:3000',
+      bypass: function (req, res, proxyOptions) {
+        if (req.headers.accept.indexOf('html') !== -1) {
+          console.log('Skipping proxy for browser request.');
+          return '/index.html';
+        }
+      }
+    }]
   },
 
-  // Module rules
   module: {
     rules: [
       {
@@ -32,7 +40,7 @@ export default {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [['@babel/preset-env', {"modules": false} '@babel/preset-react']
+            presets: [['@babel/preset-env', {"modules": false}], '@babel/preset-react']
           }
         }
       },
@@ -47,17 +55,14 @@ export default {
     ]
   },
 
-  // Plugins
   plugins: [
     new HtmlWebpackPlugin({
-      template: './client/public/index.html', // Adjust this path to where your HTML template is located
-      filename: 'index.html',
+      template: './client/public/index.html',
       inject: 'body'
     })
   ],
 
-  // Resolve extensions
   resolve: {
-    extensions: ['.js', '.jsx'] // Add '.jsx' if you are using JSX files
+    extensions: ['.js', '.jsx']
   }
-};
+}
