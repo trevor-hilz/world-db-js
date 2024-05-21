@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default {
-  entry: './client/src/index.js',
+  entry: './client/src/index.tsx',
 
   output: {
     path: path.resolve(__dirname, 'dist'),
