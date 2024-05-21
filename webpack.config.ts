@@ -12,7 +12,7 @@ export default {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/'
+    publicPath: '/',
   },
 
   devServer: {
@@ -20,16 +20,18 @@ export default {
       directory: path.join(__dirname, 'public'),
     },
     historyApiFallback: true,
-    proxy: [{
-      context: ['/api'],
-      target: 'http://localhost:3000',
-      bypass: function (req, res, proxyOptions) {
-        if (req.headers.accept.indexOf('html') !== -1) {
-          console.log('Skipping proxy for browser request.');
-          return '/index.html';
-        }
-      }
-    }]
+    proxy: [
+      {
+        context: ['/api'],
+        target: 'http://localhost:3000',
+        // bypass: function (req, res, proxyOptions) {
+        //   if (req.headers.accept.indexOf('html') !== -1) {
+        //     console.log('Skipping proxy for browser request.');
+        //     return '/index.html';
+        //   }
+        // },
+      },
+    ],
   },
 
   module: {
@@ -40,29 +42,32 @@ export default {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [['@babel/preset-env', {"modules": false}], '@babel/preset-react']
-          }
-        }
+            presets: [
+              ['@babel/preset-env', { modules: false }],
+              '@babel/preset-react',
+            ],
+          },
+        },
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
-      }
-    ]
+      },
+    ],
   },
 
   plugins: [
     new HtmlWebpackPlugin({
       template: './client/public/index.html',
-      inject: 'body'
-    })
+      inject: 'body',
+    }),
   ],
 
   resolve: {
-    extensions: ['.js', '.jsx']
-  }
-}
+    extensions: ['.js', '.jsx', 'tsx', 'ts'],
+  },
+};
